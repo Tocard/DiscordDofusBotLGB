@@ -49,9 +49,6 @@ tables = [
     """
 ]
 
-
-
-
 # Execute table creation
 for table in tables:
     cursor_obj.execute(table)
@@ -133,18 +130,18 @@ async def help_command(interaction: discord.Interaction):
         app_commands.Choice(name="Free", value="free"),
         app_commands.Choice(name="List Zone Rows", value="list_zone"),
         app_commands.Choice(name="List All Zones", value="list_all_zones"),
-    ]
+    ],
 )
 async def percepteur_menu(interaction: discord.Interaction, percepteur_action: app_commands.Choice[str],
                           zone: str = None):
     user = interaction.user.display_name
 
     func_map = {
-        #"help": pc.help(),
+        # "help": pc.help(),
         "register": pc.register_zone,
         "delete": pc.delete_zone,
         "reserve": pc.reserve_zone,
-        #"next": pc.next_zone(),
+        # "next": pc.next_zone(),
         "free": pc.free_zone,
         "list_zone": pc.list_zone,
         "list_all_zones": pc.list_all_zone,
@@ -230,15 +227,18 @@ async def percepteur_menu(interaction: discord.Interaction, percepteur_action: a
         app_commands.Choice(name="list_artisans", value="list_artisans"),
         app_commands.Choice(name="get_artisan", value="get_artisan"),
     ],
-    metier=[app_commands.Choice(name=_conts_metier, value=_conts_metier) for _conts_metier in dofus_const.METIERS]  # Adding the job choices
+    metier=[app_commands.Choice(name=_conts_metier, value=_conts_metier) for _conts_metier in dofus_const.METIERS],
+    # Adding the job choices
+
+    pseudo=[app_commands.Choice(name=_pseudo, value=_pseudo) for _pseudo in mt.get_artisan_list()]
 
 )
 async def metier_menu(interaction: discord.Interaction, metier_action: app_commands.Choice[str], metier: str = None,
-                 level: int = None, pseudo: str = None):
+                      level: int = None, pseudo: str = None):
     user = interaction.user.display_name
 
     func_map = {
-        #"help": mt.help,
+        # "help": mt.help,
         "register": mt.register,
         "delete": mt.delete,
         "update": mt.update,
@@ -270,6 +270,7 @@ async def metier_menu(interaction: discord.Interaction, metier_action: app_comma
             await interaction.response.send_message(f"No rows found for artisans '{pseudo}'.")
     else:
         await interaction.response.send_message("Invalid action.")
+
 
 # Error Handling
 @client.tree.error

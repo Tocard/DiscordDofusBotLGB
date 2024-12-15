@@ -119,3 +119,22 @@ def list_metiers_by_user(pseudo: str):
         logging.info(f"Error fetching data: {e}")
     finally:
         connection_obj.close()
+
+
+def get_artisan_list():
+    connection_obj = sqlite3.connect('lbg.db')
+    cursor_obj = connection_obj.cursor()
+    cursor_obj.execute("PRAGMA foreign_keys = ON;")
+
+    try:
+        cursor_obj.execute(
+            "SELECT DISTINCT Pseudo FROM METIERS"
+        )
+        rows = cursor_obj.fetchall()
+        pseudo_list = [row[0] for row in rows]
+
+        return pseudo_list
+    except sqlite3.Error as e:
+        logging.info(f"Error fetching data: {e}")
+    finally:
+        connection_obj.close()
