@@ -23,18 +23,20 @@ tables = [
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
         Pseudo TEXT NOT NULL,
         Metier TEXT NOT NULL,
-        Lvl INTEGER NOT NULL,
+        Level INTEGER NOT NULL,
         DateUpdated TEXT,
-        DateCreated TEXT
+        DateCreated TEXT,
+        UNIQUE(Pseudo, Metier)
     );
     """,
     """
     CREATE TABLE IF NOT EXISTS ZONES (
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
-        ZONE TEXT NOT NULL UNIQUE,
+        Zone TEXT NOT NULL UNIQUE,
         IsLocked INTEGER NOT NULL DEFAULT 0,
         Date TEXT,
-        CreatedBy TEXT
+        CreatedBy TEXT,
+        UNIQUE(Zone)
     );
     """,
     """
@@ -246,28 +248,18 @@ async def metier_menu(interaction: discord.Interaction, metier_action: app_comma
         "get_artisan": mt.list_metiers_by_user,
     }
 
+    embed = None
     if metier_action.value == 'register' or metier_action.value == 'update':
-        rows = func_map[metier_action.value](metier, user, level)
+        embed = func_map[metier_action.value](metier, user, level)
     elif metier_action.value == 'delete':
-        rows = func_map[metier_action.value](metier, user)
+        embed = func_map[metier_action.value](metier, user)
     elif metier_action.value == 'list_artisans':
-        rows = func_map[metier_action.value](metier, level)
-        if rows:
-            embed = discord.Embed(title=f"Artisans de proffession {metier} avec le lvl mini {level}", color=0x3498db)
-            for row in rows:
-                embed.add_field(name=f"Pseudo: {row[0]} ", value=f"Lvl: {row[2]}", inline=False)
-            await interaction.response.send_message(embed=embed)
-        else:
-            await interaction.response.send_message(f"No rows found for metier '{metier}'.")
+        embed = func_map[metier_action.value](metier, level)
     elif metier_action.value == 'get_artisan':
-        rows = func_map[metier_action.value](pseudo)
-        if rows:
-            embed = discord.Embed(title=f"Métier de: {pseudo}", color=0x3498db)
-            for row in rows:
-                embed.add_field(name=f"Metier: {row[1]} ", value=f"Lvl: {row[2]}", inline=False)
-            await interaction.response.send_message(embed=embed)
-        else:
-            await interaction.response.send_message(f"No rows found for artisans '{pseudo}'.")
+        embed = func_map[metier_action.value](pseudo)
+
+    if embed is not None:
+        await interaction.response.send_message(embed=embed)
     else:
         await interaction.response.send_message("Invalid action.")
 
