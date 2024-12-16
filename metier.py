@@ -4,6 +4,7 @@ import logging
 import discord
 
 import color
+import bot_default as bf
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
@@ -14,8 +15,7 @@ def register(metier: str, user: str, level: int):
     cursor_obj.execute("PRAGMA foreign_keys = ON;")
     current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    logging.info("Unknown error occurred.")
-    embed = discord.Embed(title="Unexpected Error", color=color.RED)
+    embed = bf.error_generic()
 
     try:
         cursor_obj.execute(
@@ -33,8 +33,6 @@ def register(metier: str, user: str, level: int):
             embed = discord.Embed(title=f"Métier déja enregistré", color=color.YELLOW)
         else:
             logging.info(f"Error registering metier '{metier}:{level} from {user}': {e}")
-            embed = discord.Embed(title=f"Erreur du bot <@869961454521049098>",
-                                  color=color.RED)
     finally:
         return embed
 
@@ -43,6 +41,8 @@ def delete(metier: str, user: str):
     connection_obj = sqlite3.connect('lbg.db')
     cursor_obj = connection_obj.cursor()
     cursor_obj.execute("PRAGMA foreign_keys = ON;")
+
+    embed = bf.error_generic()
 
     try:
         cursor_obj.execute("DELETE FROM METIERS WHERE Metier = ?;", (metier,))
@@ -58,8 +58,6 @@ def delete(metier: str, user: str):
 
     except sqlite3.IntegrityError as e:
         logging.info(f"Error updating metier '{metier}': {e}")
-        embed = discord.Embed(title=f"Erreur du bot <@869961454521049098>",
-                              color=color.RED)
 
     finally:
         connection_obj.close()
@@ -71,6 +69,8 @@ def update(metier: str, user: str, level: int):
     cursor_obj = connection_obj.cursor()
     cursor_obj.execute("PRAGMA foreign_keys = ON;")
     current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    embed = bf.error_generic()
 
     try:
         cursor_obj.execute(
@@ -89,8 +89,7 @@ def update(metier: str, user: str, level: int):
 
     except sqlite3.IntegrityError as e:
         logging.info(f"Error updating metier '{metier}': {e}")
-        embed = discord.Embed(title=f"Erreur du bot <@869961454521049098>",
-                              color=color.RED)
+
     finally:
         connection_obj.close()
         return embed
@@ -100,6 +99,7 @@ def list_artisans(metier: str, level: int):
     connection_obj = sqlite3.connect('lbg.db')
     cursor_obj = connection_obj.cursor()
     cursor_obj.execute("PRAGMA foreign_keys = ON;")
+    embed = bf.error_generic()
 
     try:
         cursor_obj.execute(
@@ -123,8 +123,6 @@ def list_artisans(metier: str, level: int):
                                   color=color.YELLOW)
 
     except sqlite3.Error as e:
-        embed = discord.Embed(title=f"Erreur du bot <@869961454521049098>",
-                              color=color.RED)
         logging.info(f"Error fetching data: {e}")
 
     finally:
@@ -136,6 +134,7 @@ def list_metiers_by_user(pseudo: str):
     connection_obj = sqlite3.connect('lbg.db')
     cursor_obj = connection_obj.cursor()
     cursor_obj.execute("PRAGMA foreign_keys = ON;")
+    embed = bf.error_generic()
 
     try:
         cursor_obj.execute(
@@ -157,8 +156,7 @@ def list_metiers_by_user(pseudo: str):
         return rows
     except sqlite3.Error as e:
         logging.info(f"Error fetching data: {e}")
-        embed = discord.Embed(title=f"Erreur du bot <@869961454521049098>",
-                              color=color.RED)
+
     finally:
         connection_obj.close()
         return embed
