@@ -33,7 +33,7 @@ def register(metier: str, user: str, level: int):
             embed = discord.Embed(title=f"Métier déja enregistré", color=color.YELLOW)
         else:
             logging.info(f"Error registering metier '{metier}:{level} from {user}': {e}")
-            embed = discord.Embed(title=f"Erreur du bot @<869961454521049098>",
+            embed = discord.Embed(title=f"Erreur du bot <@869961454521049098>",
                                   color=color.RED)
     finally:
         return embed
@@ -58,7 +58,7 @@ def delete(metier: str, user: str):
 
     except sqlite3.IntegrityError as e:
         logging.info(f"Error updating metier '{metier}': {e}")
-        embed = discord.Embed(title=f"Erreur du bot @<869961454521049098>",
+        embed = discord.Embed(title=f"Erreur du bot <@869961454521049098>",
                               color=color.RED)
 
     finally:
@@ -89,7 +89,7 @@ def update(metier: str, user: str, level: int):
 
     except sqlite3.IntegrityError as e:
         logging.info(f"Error updating metier '{metier}': {e}")
-        embed = discord.Embed(title=f"Erreur du bot @<869961454521049098>",
+        embed = discord.Embed(title=f"Erreur du bot <@869961454521049098>",
                               color=color.RED)
     finally:
         connection_obj.close()
@@ -123,7 +123,7 @@ def list_artisans(metier: str, level: int):
                                   color=color.YELLOW)
 
     except sqlite3.Error as e:
-        embed = discord.Embed(title=f"Erreur du bot @<869961454521049098>",
+        embed = discord.Embed(title=f"Erreur du bot <@869961454521049098>",
                               color=color.RED)
         logging.info(f"Error fetching data: {e}")
 
@@ -157,7 +157,7 @@ def list_metiers_by_user(pseudo: str):
         return rows
     except sqlite3.Error as e:
         logging.info(f"Error fetching data: {e}")
-        embed = discord.Embed(title=f"Erreur du bot @<869961454521049098>",
+        embed = discord.Embed(title=f"Erreur du bot <@869961454521049098>",
                               color=color.RED)
     finally:
         connection_obj.close()
