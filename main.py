@@ -219,8 +219,13 @@ async def percepteur_menu(interaction: discord.Interaction, percepteur_action: a
         await interaction.response.send_message("Invalid action.")
 
 
-# Command: Metier
-@client.tree.command(name="metier", description="Manage metier actions")
+@client.tree.command(name="metier", description="Manage work actions")
+@app_commands.describe(
+    metier_action="Choose an action to perform (e.g., Register, Delete, Update, etc.)",
+    metier="Specify the work you want to manage.",
+    level="Enter the level for the métier (required for Register and Update).",
+    pseudo="Enter the name of the artisan (used with Get Artisan).",
+)
 @app_commands.choices(
     metier_action=[
         app_commands.Choice(name="Register", value="register"),
@@ -230,7 +235,6 @@ async def percepteur_menu(interaction: discord.Interaction, percepteur_action: a
         app_commands.Choice(name="get_artisan", value="get_artisan"),
     ],
     metier=[app_commands.Choice(name=_conts_metier, value=_conts_metier) for _conts_metier in dofus_const.METIERS],
-    # Adding the job choices
 
     pseudo=[app_commands.Choice(name=_pseudo, value=_pseudo) for _pseudo in mt.get_artisan_list()]
 

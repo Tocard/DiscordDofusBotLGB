@@ -138,7 +138,7 @@ def list_metiers_by_user(pseudo: str):
 
     try:
         cursor_obj.execute(
-            "SELECT Pseudo, Metier, level, DateCreated, DateUpdated FROM METIERS WHERE Pseudo = ?;",
+            "SELECT Pseudo, Metier, Level, DateCreated, DateUpdated FROM METIERS WHERE Pseudo = ? ORDER BY Level DESC;",
             (pseudo,)
         )
         rows = cursor_obj.fetchall()
@@ -172,6 +172,7 @@ def get_artisan_list():
             "SELECT DISTINCT Pseudo FROM METIERS"
         )
         rows = cursor_obj.fetchall()
+        logging.info(f"Found {len(rows)} Artisans registered")
         pseudo_list = [row[0] for row in rows]
 
         return pseudo_list
