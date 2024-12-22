@@ -151,8 +151,8 @@ def get_zones_like(search_string: str):
     cursor_obj = connection_obj.cursor()
     try:
         # Use parameterized query to avoid SQL injection
-        query = "SELECT ZONE FROM ZONES WHERE ZONE LIKE ?;"
-        cursor_obj.execute(query, ('%' + search_string + '%',))  # Wrap search_string with wildcards for LIKE
+        query = "SELECT ZONE FROM ZONES WHERE LOWER(ZONE) LIKE LOWER(?) LIMIT 25;"
+        cursor_obj.execute(query, (f"%{search_string}%",))  # Wrap search_string with wildcards for LIKE
         rows = cursor_obj.fetchall()
 
         zones = [row[0] for row in rows]
@@ -160,7 +160,6 @@ def get_zones_like(search_string: str):
         return zones
     finally:
         connection_obj.close()
-
 
 
 

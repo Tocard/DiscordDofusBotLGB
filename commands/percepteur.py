@@ -1,3 +1,5 @@
+import logging
+
 import discord
 from discord import app_commands
 
@@ -38,5 +40,5 @@ def percepteur_wrapper(client):
     @percepteur_menu.autocomplete("zone")
     async def zone_autocomplete(interaction: discord.Interaction, current: str):
         all_zones = pc.get_zones_like(current)
-        filtered_zones = [zone for zone in all_zones if zone.lower().startswith(current.lower())]
-        return [app_commands.Choice(name=zone, value=zone) for zone in filtered_zones]
+        logging.info(f"Input: {current} Filtered zones: {all_zones}")
+        return [app_commands.Choice(name=zone, value=zone) for zone in all_zones]
