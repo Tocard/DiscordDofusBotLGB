@@ -152,8 +152,6 @@ async def metier_menu(interaction: discord.Interaction, metier_action: app_comma
 @client.tree.command(name="admin", description="Manage admin actions")
 @app_commands.describe(
     actions="Choose an action to perform (e.g., Register, Delete, Update, etc.)",
-    metier="Specify the work you want to manage.",
-    level="Enter the level for the métier (required for Register and Update).",
     pseudo="Enter the name of the artisan (used with Get Artisan).",
 )
 @app_commands.choices(
@@ -169,8 +167,7 @@ async def metier_menu(interaction: discord.Interaction, metier_action: app_comma
     pseudo=[app_commands.Choice(name=_pseudo, value=_pseudo) for _pseudo in mt.get_artisan_list()]
 
 )
-async def admin_menu(interaction: discord.Interaction, actions: app_commands.Choice[str], metier: str = None,
-                      level: int = None, pseudo: str = None,  channel_id: str = None):
+async def admin_menu(interaction: discord.Interaction, actions: app_commands.Choice[str], pseudo: str = None,  channel_id: str = None):
     user = interaction.user
     if not admin.is_user_in_list(user):
         await interaction.response.send_message('Not admin')
@@ -185,6 +182,8 @@ async def admin_menu(interaction: discord.Interaction, actions: app_commands.Cho
                 tags.append(tag.name)
             _thread['tags'] = tags
             await interaction.response.send_message(_thread)
+    else:
+        await interaction.response.send_message("Bad Action")
 
 
 @client.tree.error
