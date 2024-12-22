@@ -3,8 +3,8 @@ import sqlite3
 import logging
 import discord
 
-import color
-import bot_default as bf
+import commands.utils.color as color
+import commands.utils.bot_default as bf
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 

@@ -1,6 +1,6 @@
 import discord
 from discord import app_commands
-from config import load_config
+from commands.utils.config import load_config
 
 cfg = load_config()
 
