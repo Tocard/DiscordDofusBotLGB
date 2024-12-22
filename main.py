@@ -268,7 +268,22 @@ async def metier_menu(interaction: discord.Interaction, metier_action: app_comma
         await interaction.response.send_message("Invalid action.")
 
 
-# Error Handling
+# Command to fetch posts from a forum channel
+@client.tree.command(name="get_forum_posts", description="Fetch and display all forum posts with their tags.")
+@app_commands.describe(channel_id="The ID of the forum channel.")
+async def get_forum_posts(interaction: discord.Interaction, channel_id: str):
+    channel = client.get_channel(int(channel_id))
+
+    for thread in channel.threads:
+        _thread = {"name": thread.name,
+                   "tags": []}
+        tags = []
+        for tag in thread.applied_tags:
+            tags.append(tag.name)
+        _thread['tags'] = tags
+
+        await interaction.response.send_message(_thread)
+
 @client.tree.error
 async def on_command_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
     logging.error(f"Error occurred: {error}")
