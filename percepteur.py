@@ -120,3 +120,16 @@ def list_all_zone():
         return zones
     finally:
         connection_obj.close()
+
+def get_all_zones_name():
+    connection_obj = sqlite3.connect('lbg.db')
+    cursor_obj = connection_obj.cursor()
+    try:
+        cursor_obj.execute("SELECT ZONE FROM ZONES;")
+        rows = cursor_obj.fetchall()
+
+        zones = [row[0] for row in rows]
+
+        return zones
+    finally:
+        connection_obj.close()
